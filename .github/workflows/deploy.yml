@@ -6,11 +6,11 @@ on:
 
 env:
   PROJECT_ID: tonal-transit-452819-t1
-  GAR_LOCATION: europe-central2
+  GAR_LOCATION: europe-central2-a
   GAR_REPO: monitoring-repo
   IMAGE: monitoring-service
   CLUSTER_NAME: dev-monitoring-cluster  
-  GCP_REGION: europe-central2           
+  GCP_REGION: europe-central2-a    
 
 jobs:
   build-and-push:
