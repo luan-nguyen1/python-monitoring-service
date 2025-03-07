@@ -3,6 +3,9 @@ name: CI/CD to GKE
 on:
   push:
     branches: [main]
+    paths:             
+      - "k8s/**"             
+      - "Dockerfile"         
 
 env:
   PROJECT_ID: tonal-transit-452819-t1
@@ -48,7 +51,7 @@ jobs:
         gcloud container clusters get-credentials ${{ env.CLUSTER_NAME }} \
           --zone=${{ env.GCP_REGION }}
 
-    - name: Install gke-gcloud-auth-plugin  # ✅ FIX AUTH ISSUES
+    - name: Install gke-gcloud-auth-plugin 
       run: |
         curl -sSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
         echo "deb https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
