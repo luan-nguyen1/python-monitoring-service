@@ -1,21 +1,22 @@
 from flask import Flask, jsonify
+from prometheus_flask_exporter import PrometheusMetrics
 import psutil
-import os
 import socket
 import time
 
 app = Flask(__name__)
+metrics = PrometheusMetrics(app)
 
 @app.route('/metrics', methods=['GET'])
-def get_metrics():
-    metrics = {
+def custom_metrics():
+    metrics_data = {
         'cpu_percent': psutil.cpu_percent(),
         'memory_percent': psutil.virtual_memory().percent,
         'disk_percent': psutil.disk_usage('/').percent,
         'hostname': socket.gethostname(),
         'timestamp': time.time()
     }
-    return jsonify(metrics)
+    return jsonify(metrics_data)
 
 @app.route('/health', methods=['GET'])
 def health_check():
@@ -26,11 +27,11 @@ def home():
     return jsonify({
         'service': 'Python Monitoring Microservice',
         'endpoints': [
-            {'path': '/metrics', 'description': 'Get system metrics'},
-            {'path': '/health', 'description': 'Health check endpoint'}
+            {'path': '/metrics', 'description': 'Get custom system metrics'},
+            {'path': '/health', 'description': 'Health check endpoint'},
+            {'path': '/prometheus', 'description': 'Prometheus metrics'}
         ]
     })
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 8080))
-    app.run(host='0.0.0.0', port=port)
+    app.run(host='0.0.0.0', port=8080)
